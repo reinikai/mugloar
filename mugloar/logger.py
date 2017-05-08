@@ -2,6 +2,7 @@ from datetime import datetime
 from tabulate import tabulate
 import sys
 
+# ANSI color escape codes for colored console output.
 RED   = "\033[1;31m"
 BLUE  = "\033[1;34m"
 CYAN  = "\033[1;36m"
@@ -11,13 +12,13 @@ BOLD  = "\033[;1m"
 
 class Logger:
 
-    stats = {'NMR': {'win': 0, 'lose': 0},
-             'FUNDEFINEDG': {'win': 0, 'lose': 0},
-             'HVA': {'win': 0, 'lose': 0},
-             'SRO': {'win': 0, 'lose': 0},
-             'T E': {'win': 0, 'lose': 0}}
-
-    weather_code = ""
+    def __init__(self):
+        self.stats = {'NMR': {'win': 0, 'lose': 0},
+                      'FUNDEFINEDG': {'win': 0, 'lose': 0},
+                      'HVA': {'win': 0, 'lose': 0},
+                      'SRO': {'win': 0, 'lose': 0},
+                      'T E': {'win': 0, 'lose': 0}}
+        self.weather_code = None
 
     @staticmethod
     def new_game(params):
@@ -41,18 +42,14 @@ class Logger:
         sys.stdout.buffer.write(text.encode('utf8'))
 
     def result(self, result):
-        print(time(), end='')
-
         if result['status'] == 'Victory':
-            sys.stdout.write(GREEN)
+            color = GREEN
             self.stats[self.weather_code]['win'] += 1
         else:
-            sys.stdout.write(RED)
+            color = RED
             self.stats[self.weather_code]['lose'] += 1
 
-        print(result['status'], end='')
-        sys.stdout.write(RESET)
-        print(': ' + result['message'])
+        print(time() + color + result['status'] + RESET + ': ' + result['message'])
 
 
     def print_stats(self):
@@ -69,15 +66,15 @@ class Logger:
                           str(battles),
                           '-' if battles < 1 else str(stat['win']),
                           '-' if battles < 1 else str(stat['lose']),
-                          str(survival_rate(stat['win'], stat['lose']))])
+                          str(survival_ratio(stat['win'], stat['lose']))])
 
-        table.append(['-----------','---------','------','--------','---------------'])
-        table.append(['TOTALS:', str(wins + losses), str(wins), str(losses), BOLD + survival_rate(wins, losses) + RESET])
+        table.append(['-----------','---------','------','--------','-----------------'])
+        table.append(['TOTALS:', str(wins + losses), str(wins), str(losses), BOLD + survival_ratio(wins, losses) + RESET])
 
-        print(tabulate(table, headers=['Weather', 'Battles', 'Wins', 'Losses', 'Survival rate']))
+        print(tabulate(table, headers=['Weather', 'Battles', 'Wins', 'Losses', 'Survival ratio']))
 
 
-def survival_rate(wins, losses):
+def survival_ratio(wins, losses):
     # No point in calculating ratio unless there were any battles.
     total = wins + losses
     if total == 0:

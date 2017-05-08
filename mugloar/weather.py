@@ -1,5 +1,5 @@
 import requests
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ElemTree
 from api import Api
 
 
@@ -26,7 +26,7 @@ class Client(Api):
         self.parse(game_body)
 
     def parse(self, xml_string):
-        root = ET.fromstring(xml_string)
+        root = ElemTree.fromstring(xml_string)
         self.weather = convert_to_dict(root)
 
 
