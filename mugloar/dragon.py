@@ -1,5 +1,3 @@
-import json
-
 
 class Dragon:
 
@@ -23,10 +21,10 @@ class Dragon:
             self.wingStrength = 0
             self.fireBreath = 4
         elif weather_code == 'NMR':
-            self.scaleThickness = 6
+            self.scaleThickness = 3
             self.clawSharpness = 6
-            self.wingStrength = 4
-            self.fireBreath = 4
+            self.wingStrength = 5
+            self.fireBreath = 6
         elif weather_code == 'SRO':
             # Stay at home if there's a storm.
             pass
