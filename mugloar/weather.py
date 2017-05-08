@@ -31,7 +31,7 @@ class Client(Api):
 
 
 def convert_to_dict(xml_element):
-    dict = {}
+    dictionary = {}
     for child in xml_element:
-        dict[child.tag] = child.text
-    return dict
+        dictionary[child.tag] = child.text
+    return dictionary

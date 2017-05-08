@@ -19,7 +19,8 @@ class Logger:
 
     weather_code = ""
 
-    def new_game(self, params):
+    @staticmethod
+    def new_game(params):
         text = '------------------------------------------\n' + \
                time() + 'Started game id ' + str(params['gameId']) + ' against ' + params['knight']['name'] + \
                ' (\u2694: ' + str(params['knight']['attack']) + ', ' + \
@@ -35,7 +36,7 @@ class Logger:
                '\u2694: ' + str(dragon.clawSharpness) + ', ' + \
                '\N{DRAGON}: ' + str(dragon.wingStrength) + ', ' + \
                '\N{FIRE}: ' + str(dragon.fireBreath) + \
-               ') in ' + weather['code'] + ' weather.\n'
+               ') in ' + weather['code'] + ' weather (' + weather['varX-Rating'] + ').\n'
 
         sys.stdout.buffer.write(text.encode('utf8'))
 
@@ -77,20 +78,24 @@ class Logger:
 
 
 def survival_rate(wins, losses):
+    # No point in calculating ratio unless there were any battles.
     total = wins + losses
     if total == 0:
         return '-'
 
+    # Avoid division by zero.
     if wins == 0:
         return RED + '0%' + RESET
 
-    rate = wins/total*100
+    # Discard unnecessary precision by converting to int.
+    rate = int(wins/total*100)
 
+    # We're aiming for a success rate of at least 60%.
     color = GREEN
     if rate < 60:
         color = RED
 
-    return color + '{0:g}'.format(rate) + '%' + RESET
+    return color + str(rate) + '%' + RESET
 
 
 def time():
