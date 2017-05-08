@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import dragon
 import game
 import logger
