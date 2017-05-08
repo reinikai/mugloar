@@ -8,13 +8,13 @@ class Dragon:
 
     def __init__(self, weather_code, knight):
         if weather_code == 'T E':
-            # Draught requires a 'balanced' dragon, ha ha
+            # Draught requires a 'balanced' dragon.
             self.scaleThickness = 5
             self.clawSharpness = 5
             self.wingStrength = 5
             self.fireBreath = 5
         elif weather_code == 'FUNDEFINEDG':
-            # Fog means we're unseen, no need to fly
+            # Fog means we're unseen, no need to fly.
             self.scaleThickness = 8
             self.clawSharpness = 8
             self.wingStrength = 0
@@ -25,10 +25,9 @@ class Dragon:
             knight = sorted(knight.items(), key=lambda x: x[1],
                             reverse=True)
 
-            # This algorithm typically delivers a success rate of over 80%.
-            i = 0
+            # This algorithm typically delivers a success ratio of over 80%.
             points_left = 20
-            for stat, value in knight:
+            for i, (stat, value) in enumerate(knight):
                 points = 0
 
                 if i == 0:
@@ -49,7 +48,6 @@ class Dragon:
                     else:
                         points = value - 1 if points_left >= value - 1 else points_left
                         setattr(self, self.stats_map[stat], points)
-                i += 1
                 points_left -= points
 
         elif weather_code == 'SRO':
