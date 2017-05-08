@@ -23,7 +23,6 @@ class Client(Api):
 
     def request(self):
         game_body = requests.get(self._base_url + '/weather/api/report/' + str(self.game_id)).text
-        print(game_body)
         self.parse(game_body)
 
     def parse(self, xml_string):
