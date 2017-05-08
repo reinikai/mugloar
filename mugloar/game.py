@@ -11,7 +11,8 @@ class Client(Api):
         json_string = requests.get(self._base_url + '/api/game').text
         self.params = self.parse(json_string)
 
-    def parse(self, json_string):
+    @staticmethod
+    def parse(json_string):
         return json.loads(json_string)
 
     def send_solution(self, dragon):
