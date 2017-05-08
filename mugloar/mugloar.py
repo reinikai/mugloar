@@ -3,7 +3,7 @@ import game
 import logger
 import weather
 
-iterations = 10
+iterations = 30
 
 game_client = game.Client()
 log = logger.Logger()
@@ -19,7 +19,7 @@ for i in range(iterations):
     weather_client.request()
 
     # 3. Solves the game by selectively distributing 20 points on a dragon stats
-    dragon_object = dragon.Dragon(weather_client.weather['code'])
+    dragon_object = dragon.Dragon(weather_client.weather['code'], game_client.params['knight'])
     log.dragon(dragon_object, weather_client.weather)
 
     # 4. Sends the response to solve API

@@ -1,13 +1,16 @@
 
 class Dragon:
 
-    # By default, stay home.
+    stats_map = {'attack': 'scaleThickness',
+                 'armor': 'clawSharpness',
+                 'agility': 'wingStrength',
+                 'endurance': 'fireBreath'}
     scaleThickness = 0
     clawSharpness = 0
     wingStrength = 0
     fireBreath = 0
 
-    def __init__(self, weather_code):
+    def __init__(self, weather_code, knight):
         if weather_code == 'T E':
             # Draught requires a 'balanced' dragon, ha ha
             self.scaleThickness = 5
@@ -21,18 +24,46 @@ class Dragon:
             self.wingStrength = 0
             self.fireBreath = 4
         elif weather_code == 'NMR':
-            self.scaleThickness = 3
-            self.clawSharpness = 6
-            self.wingStrength = 5
-            self.fireBreath = 6
+            # Remove name (string) so that sorting of integers works as expected.
+            del knight['name']
+            knight = sorted(knight.items(), key=lambda x: x[1],
+                            reverse=True)
+
+            i = 0
+            points_left = 20
+            for stat, value in knight:
+                points = 0
+
+                if i == 0:
+                    points = value + 2 if points_left >= value + 2 else points_left
+                    setattr(self, self.stats_map[stat], points)
+                elif i == 1:
+                    if value < 3:
+                        setattr(self, self.stats_map[stat], 0)
+                    else:
+                        points = value - 2 if points_left >= value - 2 else points_left
+                        setattr(self, self.stats_map[stat], points)
+                elif i == 2:
+                    points = value + 1 if points_left >= value + 1 else points_left
+                    setattr(self, self.stats_map[stat], points)
+                else:
+                    if value < 2:
+                        setattr(self, self.stats_map[stat], 0)
+                    else:
+                        points = value - 1 if points_left >= value - 1 else points_left
+                        setattr(self, self.stats_map[stat], points)
+                i += 1
+                points_left -= points
+
         elif weather_code == 'SRO':
-            # Stay at home if there's a storm.
+            # Doesn't really matter what we do here - EVERYONE DIES!
             pass
         else:
-            # Fire is useless in the rain. Additional claw-sharpening is needed to destroy the umbrellaboats
             self.scaleThickness = 5
+            # Additional claw-sharpening is needed to destroy the umbrellaboats.
             self.clawSharpness = 10
             self.wingStrength = 5
+            # Fire is useless in the rain.
             self.fireBreath = 0
 
     def get_json(self):
