@@ -56,23 +56,25 @@ class Logger:
 
     def print_stats(self):
         print('------------------------------------------\n' +
-              'STATISTICS\n' +
-              'Iterations: ' + '\n\n' +
-              'By weather type:')
+              'STATISTICS\n')
 
         table = []
+        wins, losses = 0, 0
         for weather_code, stat in self.stats.items():
-            table.append([weather_code, str(stat['win'] + stat['lose']), str(stat['win']), str(stat['lose']), str(survival_rate(stat['win'], stat['lose']))])
+            battles = stat['win'] + stat['lose']
+            wins += stat['win']
+            losses += stat['lose']
+            table.append([weather_code,
+                          str(battles),
+                          '-' if battles < 1 else str(stat['win']),
+                          '-' if battles < 1 else str(stat['lose']),
+                          str(survival_rate(stat['win'], stat['lose']))])
+
+        table.append(['-----------','---------','------','--------','---------------'])
+        table.append(['TOTALS:', str(wins + losses), str(wins), str(losses), BOLD + survival_rate(wins, losses) + RESET])
 
         print(tabulate(table, headers=['Weather', 'Battles', 'Wins', 'Losses', 'Survival rate']))
 
-        print('\n\nOVERALL SUCCESS RATE: ', end='')
-        success_rate = 0
-        if success_rate < 60:
-            sys.stdout.write(RED)
-        else:
-            sys.stdout.write(GREEN)
-        print(str(success_rate) + '%')
 
 def survival_rate(wins, losses):
     total = wins + losses
@@ -80,10 +82,15 @@ def survival_rate(wins, losses):
         return '-'
 
     if wins == 0:
-        return '0%'
+        return RED + '0%' + RESET
 
-    rate = wins/total
-    return '{0:g}'.format(rate*100) + '%'
+    rate = wins/total*100
+
+    color = GREEN
+    if rate < 60:
+        color = RED
+
+    return color + '{0:g}'.format(rate) + '%' + RESET
 
 
 def time():
