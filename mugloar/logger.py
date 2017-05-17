@@ -58,7 +58,7 @@ class Logger:
 
     def print_stats(self):
         print('------------------------------------------\n' +
-              'STATISTICS\n')
+              'BATTLE STATISTICS\n')
 
         table = []
         wins, losses = 0, 0
@@ -70,15 +70,15 @@ class Logger:
                           str(battles),
                           '-' if battles < 1 else str(stat['win']),
                           '-' if battles < 1 else str(stat['lose']),
-                          str(survival_ratio(stat['win'], stat['lose']))])
+                          str(success_ratio(stat['win'], stat['lose']))])
 
         table.append(['-----------','---------','------','--------','-----------------'])
-        table.append(['TOTALS:', str(wins + losses), str(wins), str(losses), BOLD + survival_ratio(wins, losses) + RESET])
+        table.append(['TOTALS:', str(wins + losses), str(wins), str(losses), BOLD + success_ratio(wins, losses) + RESET])
 
-        print(tabulate(table, headers=['Weather', 'Battles', 'Wins', 'Losses', 'Survival ratio']))
+        print(tabulate(table, headers=['Weather', 'Battles', 'Wins', 'Losses', 'Success ratio']))
 
 
-def survival_ratio(wins, losses):
+def success_ratio(wins, losses):
     # No point in calculating ratio unless there were any battles.
     total = wins + losses
     if total == 0:
