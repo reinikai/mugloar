@@ -11,7 +11,8 @@ POINTS_AVAILABLE = 20
 # Otherwise, "Dragon died of performance enhancement drug overdose"
 MAX_PER_STAT = 10
 
-# The API does not allow one to assign negative points.
+# The API does not allow one to assign negative points to a stat.
+# Otherwise: ""Dragon developed anorexia and went chasing after a career as a runway model"
 MIN_PER_STAT = 0
 
 
