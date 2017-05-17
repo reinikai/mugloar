@@ -56,6 +56,9 @@ for i in range(BATTLE_COUNT):
                 log.result(result)
 
                 if result['status'] == "Victory":
+                    # Output comparison of knight's and dragon's stats to ease
+                    # development of a solution algorithm.
+                    log.comparison(game_client.params['knight'], dragon_object, dragon.STATS_MAP)
                     break
             else:
                 continue  # executed if the inner loop ended normally (no break)

@@ -11,7 +11,8 @@ POINTS_AVAILABLE = 20
 # Otherwise, "Dragon died of performance enhancement drug overdose"
 MAX_PER_STAT = 10
 
-# The API does not allow one to assign negative points.
+# The API does not allow one to assign negative points to a stat.
+# Otherwise: "Dragon developed anorexia and went chasing after a career as a runway model"
 MIN_PER_STAT = 0
 
 
@@ -82,7 +83,7 @@ def possible_solutions():
 
 def partition(integer, partition_length, min_size, max_size):
     """ Invoke positive integer partitioning with minimum and maximum element limits. """
-    if partition_length < 1:
+    if partition_length < 1 or integer < 0:
         return
 
     if partition_length == 1:
