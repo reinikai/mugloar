@@ -40,8 +40,7 @@ class Logger:
         text = time() + 'Sending dragon number ' + str(i) + ' (\u26E8: ' + str(dragon.dragon_stats['scaleThickness']) + ', ' + \
                '\u2694: ' + str(dragon.dragon_stats['clawSharpness']) + ', ' + \
                '\N{DRAGON}: ' + str(dragon.dragon_stats['wingStrength']) + ', ' + \
-               '\N{FIRE}: ' + str(dragon.dragon_stats['fireBreath']) + \
-               ').\n'
+               '\N{FIRE}: ' + str(dragon.dragon_stats['fireBreath']) + ').\n'
 
         sys.stdout.buffer.write(text.encode('utf8'))
 
@@ -59,6 +58,15 @@ class Logger:
             self.stats[self.weather_code]['win'] += 1
         else:
             self.stats[self.weather_code]['lose'] += 1
+
+    @staticmethod
+    def comparison(knight, dragon, stats_map):
+        print(time() + "Stat diff (knight/dragon): ")
+
+        for knight_stat, dragon_stat in stats_map.items():
+            print(knight_stat + "/" + dragon_stat + ": " +
+                  str(knight[knight_stat]) + "/" + str(dragon.dragon_stats[dragon_stat]) +
+                  ", difference " + str(knight[knight_stat] - dragon.dragon_stats[dragon_stat]))
 
     def print_stats(self):
         print('------------------------------------------\n' +
