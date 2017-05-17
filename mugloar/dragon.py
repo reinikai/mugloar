@@ -12,7 +12,7 @@ POINTS_AVAILABLE = 20
 MAX_PER_STAT = 10
 
 # The API does not allow one to assign negative points to a stat.
-# Otherwise: ""Dragon developed anorexia and went chasing after a career as a runway model"
+# Otherwise: "Dragon developed anorexia and went chasing after a career as a runway model"
 MIN_PER_STAT = 0
 
 
