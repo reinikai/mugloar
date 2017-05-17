@@ -31,30 +31,38 @@ class Logger:
 
         sys.stdout.buffer.write(text.encode('utf8'))
 
-    def dragon(self, dragon, weather):
+    def weather(self, weather):
         self.weather_code = weather['code']
-        text = time() + 'Sending dragon (\u26E8: ' + str(dragon.dragon_stats['scaleThickness']) + ', ' + \
+        print(time() + "Weather for battle is " + weather['code'] + ' (' + weather['varX-Rating'] + ').')
+
+    @staticmethod
+    def dragon(dragon, i=1):
+        text = time() + 'Sending dragon number ' + str(i) + ' (\u26E8: ' + str(dragon.dragon_stats['scaleThickness']) + ', ' + \
                '\u2694: ' + str(dragon.dragon_stats['clawSharpness']) + ', ' + \
                '\N{DRAGON}: ' + str(dragon.dragon_stats['wingStrength']) + ', ' + \
                '\N{FIRE}: ' + str(dragon.dragon_stats['fireBreath']) + \
-               ') in ' + weather['code'] + ' weather (' + weather['varX-Rating'] + ').\n'
+               ').\n'
 
         sys.stdout.buffer.write(text.encode('utf8'))
 
-    def result(self, result):
+    @staticmethod
+    def result(result):
         if result['status'] == 'Victory':
             color = GREEN
-            self.stats[self.weather_code]['win'] += 1
         else:
             color = RED
-            self.stats[self.weather_code]['lose'] += 1
 
         print(time() + color + result['status'] + RESET + ': ' + result['message'])
 
+    def battle(self, status):
+        if status == 'Victory':
+            self.stats[self.weather_code]['win'] += 1
+        else:
+            self.stats[self.weather_code]['lose'] += 1
 
     def print_stats(self):
         print('------------------------------------------\n' +
-              'STATISTICS\n')
+              'BATTLE STATISTICS\n')
 
         table = []
         wins, losses = 0, 0
@@ -66,15 +74,15 @@ class Logger:
                           str(battles),
                           '-' if battles < 1 else str(stat['win']),
                           '-' if battles < 1 else str(stat['lose']),
-                          str(survival_ratio(stat['win'], stat['lose']))])
+                          str(success_ratio(stat['win'], stat['lose']))])
 
         table.append(['-----------','---------','------','--------','-----------------'])
-        table.append(['TOTALS:', str(wins + losses), str(wins), str(losses), BOLD + survival_ratio(wins, losses) + RESET])
+        table.append(['TOTALS:', str(wins + losses), str(wins), str(losses), BOLD + success_ratio(wins, losses) + RESET])
 
-        print(tabulate(table, headers=['Weather', 'Battles', 'Wins', 'Losses', 'Survival ratio']))
+        print(tabulate(table, headers=['Weather', 'Battles', 'Wins', 'Losses', 'Success ratio']))
 
 
-def survival_ratio(wins, losses):
+def success_ratio(wins, losses):
     # No point in calculating ratio unless there were any battles.
     total = wins + losses
     if total == 0:
