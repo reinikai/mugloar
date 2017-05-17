@@ -31,13 +31,17 @@ class Logger:
 
         sys.stdout.buffer.write(text.encode('utf8'))
 
-    def dragon(self, dragon, weather):
+    def weather(self, weather):
         self.weather_code = weather['code']
-        text = time() + 'Sending dragon (\u26E8: ' + str(dragon.dragon_stats['scaleThickness']) + ', ' + \
+        print(time() + "Weather for battle is " + weather['code'] + ' (' + weather['varX-Rating'] + ').')
+
+    @staticmethod
+    def dragon(dragon, i=1):
+        text = time() + 'Sending dragon number ' + str(i) + ' (\u26E8: ' + str(dragon.dragon_stats['scaleThickness']) + ', ' + \
                '\u2694: ' + str(dragon.dragon_stats['clawSharpness']) + ', ' + \
                '\N{DRAGON}: ' + str(dragon.dragon_stats['wingStrength']) + ', ' + \
                '\N{FIRE}: ' + str(dragon.dragon_stats['fireBreath']) + \
-               ') in ' + weather['code'] + ' weather (' + weather['varX-Rating'] + ').\n'
+               ').\n'
 
         sys.stdout.buffer.write(text.encode('utf8'))
 
