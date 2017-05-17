@@ -45,16 +45,20 @@ class Logger:
 
         sys.stdout.buffer.write(text.encode('utf8'))
 
-    def result(self, result):
+    @staticmethod
+    def result(result):
         if result['status'] == 'Victory':
             color = GREEN
-            self.stats[self.weather_code]['win'] += 1
         else:
             color = RED
-            self.stats[self.weather_code]['lose'] += 1
 
         print(time() + color + result['status'] + RESET + ': ' + result['message'])
 
+    def battle(self, status):
+        if status == 'Victory':
+            self.stats[self.weather_code]['win'] += 1
+        else:
+            self.stats[self.weather_code]['lose'] += 1
 
     def print_stats(self):
         print('------------------------------------------\n' +
