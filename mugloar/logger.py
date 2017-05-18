@@ -66,7 +66,7 @@ class Logger:
         for knight_stat, dragon_stat in stats_map.items():
             print(knight_stat + "/" + dragon_stat + ": " +
                   str(knight[knight_stat]) + "/" + str(dragon.dragon_stats[dragon_stat]) +
-                  ", difference " + str(knight[knight_stat] - dragon.dragon_stats[dragon_stat]))
+                  ", difference " + str(dragon.dragon_stats[dragon_stat] - knight[knight_stat]))
 
     def print_stats(self):
         print('------------------------------------------\n' +
