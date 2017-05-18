@@ -1,25 +1,28 @@
 from datetime import datetime
 from operator import itemgetter
 from tabulate import tabulate
+from typing import List
 import sys
 
 # ANSI color escape codes for colored console output.
-RED   = "\033[1;31m"
-BLUE  = "\033[1;34m"
-CYAN  = "\033[1;36m"
+RED = "\033[1;31m"
+BLUE = "\033[1;34m"
+CYAN = "\033[1;36m"
 GREEN = "\033[0;32m"
 RESET = "\033[0;0m"
-BOLD  = "\033[;1m"
+BOLD = "\033[;1m"
+
 
 class Logger:
 
     def __init__(self):
+        """ Initializes instance variables. """
         self.stats = {'NMR': {'win': 0, 'lose': 0},
                       'FUNDEFINEDG': {'win': 0, 'lose': 0},
                       'HVA': {'win': 0, 'lose': 0},
                       'SRO': {'win': 0, 'lose': 0},
                       'T E': {'win': 0, 'lose': 0}}
-        self.weather_code = None
+        self.weather_code: str
 
     @staticmethod
     def new_game(params):
@@ -37,8 +40,9 @@ class Logger:
         print(time() + "Weather for battle is " + weather['code'] + ' (' + weather['varX-Rating'] + ').')
 
     @staticmethod
-    def dragon(dragon, i=1):
-        text = time() + 'Sending dragon number ' + str(i) + ' (\u26E8: ' + str(dragon.dragon_stats['scaleThickness']) + ', ' + \
+    def dragon(dragon, i: int = 1):
+        text = time() + 'Sending dragon number ' + str(i) + \
+               ' (\u26E8: ' + str(dragon.dragon_stats['scaleThickness']) + ', ' + \
                '\u2694: ' + str(dragon.dragon_stats['clawSharpness']) + ', ' + \
                '\N{DRAGON}: ' + str(dragon.dragon_stats['wingStrength']) + ', ' + \
                '\N{FIRE}: ' + str(dragon.dragon_stats['fireBreath']) + ').\n'
@@ -46,7 +50,7 @@ class Logger:
         sys.stdout.buffer.write(text.encode('utf8'))
 
     @staticmethod
-    def result(result):
+    def result(result: dict):
         if result['status'] == 'Victory':
             color = GREEN
         else:
@@ -54,14 +58,14 @@ class Logger:
 
         print(time() + color + result['status'] + RESET + ': ' + result['message'])
 
-    def battle(self, status):
+    def battle(self, status: str) -> None:
         if status == 'Victory':
             self.stats[self.weather_code]['win'] += 1
         else:
             self.stats[self.weather_code]['lose'] += 1
 
     @staticmethod
-    def comparison(knight, dragon, stats_map):
+    def comparison(knight: List[tuple], dragon, stats_map: dict) -> None:
         print(time() + "Stat diff (knight/dragon): ")
 
         for stat, value in knight:
@@ -69,7 +73,7 @@ class Logger:
                   str(value) + "/" + str(dragon.dragon_stats[stats_map[stat]]) +
                   ", difference " + str(dragon.dragon_stats[stats_map[stat]] - value))
 
-    def print_stats(self):
+    def print_stats(self) -> None:
         print('------------------------------------------\n' +
               'BATTLE STATISTICS\n')
 
@@ -85,15 +89,16 @@ class Logger:
                           '-' if battles < 1 else str(stat['lose']),
                           str(success_ratio(stat['win'], stat['lose']))])
 
-        table = sorted(table, key=itemgetter(0))
+        table.sort(key=itemgetter(0))
 
-        table.append(['-----------','---------','------','--------','-----------------'])
-        table.append(['TOTALS:', str(wins + losses), str(wins), str(losses), BOLD + success_ratio(wins, losses) + RESET])
+        table.append(['-----------', '---------', '------', '--------', '-----------------'])
+        table.append(['TOTALS:', str(wins + losses), str(wins), str(losses),
+                      BOLD + success_ratio(wins, losses) + RESET])
 
         print(tabulate(table, headers=['Weather', 'Battles', 'Wins', 'Losses', 'Success ratio']))
 
 
-def success_ratio(wins, losses):
+def success_ratio(wins: int, losses: int) -> str:
     # No point in calculating ratio unless there were any battles.
     total = wins + losses
     if total == 0:
@@ -114,5 +119,5 @@ def success_ratio(wins, losses):
     return color + str(rate) + '%' + RESET
 
 
-def time():
+def time() -> str:
     return '[' + datetime.now().strftime('%d.%m.%Y %H:%m:%S') + '] '

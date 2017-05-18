@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.6
 
 import dragon
 import game
@@ -8,17 +8,20 @@ import weather
 import itertools
 import time
 
-# Specify number of knights to battle.
-BATTLE_COUNT = 30
+from typing import List
 
-USE_SOLVER = True
+# Specify number of knights to battle.
+BATTLE_COUNT: int = 30
+
+USE_SOLVER: bool = True
 
 game_client = game.Client()
 log = logger.Logger()
 dragon_object = dragon.Dragon()
 
-def dispatch_dragon(dragon_stats, knight, relative=False):
-    """ Helper function for sending off a dragon to battle """
+
+def dispatch_dragon(dragon_stats: tuple, knight: List[tuple], relative: bool = False) -> dict:
+    """ Helper function for sending off a dragon to battle. """
 
     global dragon_number
     dragon_number += 1
@@ -45,7 +48,7 @@ def dispatch_dragon(dragon_stats, knight, relative=False):
 
 
 for battle_number in range(BATTLE_COUNT):
-    """ Repeat from step 1 specified amount of times, a.k.a main loop """
+    # Repeat from step 1 specified amount of times, a.k.a the main loop.
 
     # Keep track of how many dragon's we've used in each battle.
     dragon_number = 0
@@ -63,7 +66,7 @@ for battle_number in range(BATTLE_COUNT):
     knight_stats = game_client.params['knight']
     del knight_stats['name']
     # Sort opponent's stats from high to low so that we can match points.
-    knight_stats = sorted(knight_stats.items(), key=lambda x: x[1], reverse=True)
+    knight_stats: List[tuple] = sorted(knight_stats.items(), key=lambda x: x[1], reverse=True)
 
     # 3. Solves the game by selectively distributing 20 points on a dragon's stats
     if weather_client.weather['code'] == 'T E':
@@ -82,7 +85,7 @@ for battle_number in range(BATTLE_COUNT):
 
         # For the remaining ~20%.
         if result['status'] != "Victory":
-            result = dispatch_dragon((-1, +2, -1, 0), knight_stats, True)
+           result = dispatch_dragon((-1, +2, -1, 0), knight_stats, True)
         if result['status'] != "Victory":
             result = dispatch_dragon((+2, -1, -1, 0), knight_stats, True)
     else:
@@ -102,7 +105,7 @@ for battle_number in range(BATTLE_COUNT):
             permutations = set(itertools.permutations(solution))
 
             for permutation in permutations:
-                result = dispatch_dragon(*permutation, knight_stats)
+                result = dispatch_dragon(permutation, knight_stats)
 
                 if result['status'] == "Victory":
                     # No need to try the rest of the solutions if we've won :)
