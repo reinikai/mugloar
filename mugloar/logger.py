@@ -1,4 +1,5 @@
 from datetime import datetime
+from operator import itemgetter
 from tabulate import tabulate
 import sys
 
@@ -63,10 +64,10 @@ class Logger:
     def comparison(knight, dragon, stats_map):
         print(time() + "Stat diff (knight/dragon): ")
 
-        for knight_stat, dragon_stat in stats_map.items():
-            print(knight_stat + "/" + dragon_stat + ": " +
-                  str(knight[knight_stat]) + "/" + str(dragon.dragon_stats[dragon_stat]) +
-                  ", difference " + str(dragon.dragon_stats[dragon_stat] - knight[knight_stat]))
+        for stat, value in knight:
+            print(stat + "/" + stats_map[stat] + ": " +
+                  str(value) + "/" + str(dragon.dragon_stats[stats_map[stat]]) +
+                  ", difference " + str(dragon.dragon_stats[stats_map[stat]] - value))
 
     def print_stats(self):
         print('------------------------------------------\n' +
@@ -83,6 +84,8 @@ class Logger:
                           '-' if battles < 1 else str(stat['win']),
                           '-' if battles < 1 else str(stat['lose']),
                           str(success_ratio(stat['win'], stat['lose']))])
+
+        table = sorted(table, key=itemgetter(0))
 
         table.append(['-----------','---------','------','--------','-----------------'])
         table.append(['TOTALS:', str(wins + losses), str(wins), str(losses), BOLD + success_ratio(wins, losses) + RESET])
