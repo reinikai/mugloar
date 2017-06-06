@@ -120,4 +120,4 @@ def success_ratio(wins: int, losses: int) -> str:
 
 
 def time() -> str:
-    return '[' + datetime.now().strftime('%d.%m.%Y %H:%m:%S') + '] '
+    return '[' + datetime.now().strftime('%d.%m.%Y %H:%M:%S') + '] '
