@@ -2,11 +2,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3bc92fb26a2541d4b905d775f5a0144c)](https://www.codacy.com/app/reinikai/mugloar?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=reinikai/mugloar&amp;utm_campaign=Badge_Grade)
 
-A solution for [Dragons of Mugloar](https://www.dragonsofmugloar.com/) for Python 3.6+
+A solution for [Dragons of Mugloar](https://www.dragonsofmugloar.com/) in Python. The code uses type hinting ([PEP-484](https://www.python.org/dev/peps/pep-0484/)) so one would need at least Python version 3.6.0 to be able to run it out of the box.
 
 ## Quickstart
 
-There is a Makefile for convenience. It relies on vex, but you can use any virtualenv you like. After cloning:
+There is a Makefile for convenience. It relies on [vex](https://github.com/sashahart/vex), but you can use any virtualenv you like. After cloning:
 
 ```
 $ make init
