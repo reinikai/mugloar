@@ -85,7 +85,7 @@ for battle_number in range(BATTLE_COUNT):
 
         # For the remaining ~20%.
         if result['status'] != "Victory":
-           result = dispatch_dragon((-1, +2, -1, 0), knight_stats, True)
+            result = dispatch_dragon((-1, +2, -1, 0), knight_stats, True)
         if result['status'] != "Victory":
             result = dispatch_dragon((+2, -1, -1, 0), knight_stats, True)
     else:
