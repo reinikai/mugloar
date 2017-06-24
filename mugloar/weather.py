@@ -14,7 +14,7 @@ class Client(Api):
         self.weather: Dict[str, str] = {}
 
     def request(self) -> None:
-        game_body = requests.get(self._base_url + '/weather/api/report/' + str(self.game_id)).text
+        game_body = requests.get(self._BASE_URL + '/weather/api/report/' + str(self.game_id)).text
         self.parse(game_body)
 
     def parse(self, xml: str) -> None:

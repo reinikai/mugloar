@@ -11,7 +11,7 @@ class Client(Api):
         self.params: Dict[str, str] = {}
 
     def request(self) -> None:
-        json_string = requests.get(self._base_url + '/api/game').text
+        json_string = requests.get(self._BASE_URL + '/api/game').text
         self.params = self.parse(json_string)
 
     @staticmethod
@@ -19,5 +19,5 @@ class Client(Api):
         return json.loads(api_response)
 
     def send_solution(self, dragon) -> dict:
-        return self.parse(requests.put(self._base_url + '/api/game/' + str(self.params['gameId']) + '/solution',
+        return self.parse(requests.put(self._BASE_URL + '/api/game/' + str(self.params['gameId']) + '/solution',
                                        json=dragon).text)
