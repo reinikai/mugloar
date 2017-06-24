@@ -10,7 +10,7 @@ def log_instance():
 
 @pytest.fixture
 def knight():
-    return {'agility': 8, 'endurance': 8, 'armor': 0, 'attack': 4}
+    return [('endurance', 8), ('attack', 8), ('armor', 0), ('agility', 4)]
 
 
 @pytest.fixture
@@ -27,4 +27,5 @@ def stats_map():
 
 
 def test_comparison(log_instance, knight, dragon_instance, stats_map):
+    dragon_instance.set_relative_stats((5, 5, 5, 5), knight)
     log_instance.comparison(knight, dragon_instance, stats_map)
