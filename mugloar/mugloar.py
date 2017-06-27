@@ -11,7 +11,7 @@ import time
 from typing import List
 
 # Specify number of knights to battle.
-BATTLE_COUNT: int = 30
+BATTLE_COUNT: int = 100
 
 USE_SOLVER: bool = True
 
@@ -29,7 +29,10 @@ def dispatch_dragon(dragon_stats: tuple, knight: List[tuple], relative: bool = F
     if relative:
         dragon_object.set_relative_stats(dragon_stats, knight)
     else:
-        dragon_object.set_stats(*dragon_stats)
+        if dragon_stats:
+            dragon_object.set_stats(*dragon_stats)
+        else:
+            dragon_object.set_dragon_stays_home()
 
     log.dragon(dragon_object, dragon_number)
 
@@ -77,42 +80,15 @@ for battle_number in range(BATTLE_COUNT):
         result = dispatch_dragon((8, 8, 0, 4), knight_stats)
     elif weather_client.weather['code'] == 'SRO':
         # Doesn't really matter what we do in a storm - EVERYONE DIES!
-        result = dispatch_dragon((10, 10, 0, 0), knight_stats)
+        result = dispatch_dragon((), knight_stats)
     elif weather_client.weather['code'] == 'NMR':
         # Normal weather, we can calculate a solution relative to the knight's stats.
         # This seems to be the typical case, which offers a ~80% battle success ratio.
-        result = dispatch_dragon((+2, 0, -1, -1), knight_stats, True)
-
-        # For the remaining ~20%.
-        if result['status'] != "Victory":
-            result = dispatch_dragon((-1, +2, -1, 0), knight_stats, True)
-        if result['status'] != "Victory":
-            result = dispatch_dragon((+2, -1, -1, 0), knight_stats, True)
+        result = dispatch_dragon((+2, -1, -1, 0), knight_stats, True)
     else:
         # Fire is useless in the rain.
         # Additional claw-sharpening is needed to destroy the umbrellaboats.
         result = dispatch_dragon((5, 10, 5, 0), knight_stats)
-
-    # We didn't win the battle using the predefined (hard-coded) solutions :(
-    # Invoke a loop that goes through all possible solutions for this battle.
-    if USE_SOLVER and weather_client.weather['code'] != "SRO" and result['status'] != "Victory":
-        possible_solutions = dragon.possible_solutions()
-        for solution in possible_solutions:
-            # This is kind of API-intensive, so invoke a small delay between iterations.
-            time.sleep(1)
-
-            # Generate distinct compositions of partitions.
-            permutations = set(itertools.permutations(solution))
-
-            for permutation in permutations:
-                result = dispatch_dragon(permutation, knight_stats)
-
-                if result['status'] == "Victory":
-                    # No need to try the rest of the solutions if we've won :)
-                    break
-            else:
-                continue  # executed if the inner loop ended normally (no break)
-            break  # executed if 'continue' was skipped (break)
 
     # Keep track of what this battle's final outcome was.
     log.battle(result['status'])

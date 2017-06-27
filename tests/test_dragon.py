@@ -40,7 +40,3 @@ def test_get_json(dragon_instance, dragon_stats):
                                                      'wingStrength': 0,
                                                      'fireBreath': 0}}
 
-
-def test_partition():
-    for solution in dragon.partition(20, 4, 0, 10):
-        assert abs(solution[0]) + abs(solution[1]) + abs(solution[2]) + abs(solution[3]) == 20
