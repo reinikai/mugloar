@@ -41,11 +41,15 @@ class Logger:
 
     @staticmethod
     def dragon(dragon, i: int = 1):
-        text = time() + 'Sending dragon number ' + str(i) + \
-               ' (\u26E8: ' + str(dragon.dragon_stats['scaleThickness']) + ', ' + \
-               '\u2694: ' + str(dragon.dragon_stats['clawSharpness']) + ', ' + \
-               '\N{DRAGON}: ' + str(dragon.dragon_stats['wingStrength']) + ', ' + \
-               '\N{FIRE}: ' + str(dragon.dragon_stats['fireBreath']) + ').\n'
+        text = time()
+        if dragon.stays_home:
+            text += 'Dragon stays at home.\n'
+        else:
+            text += 'Sending dragon number ' + str(i) + \
+                   ' (\u26E8: ' + str(dragon.dragon_stats['scaleThickness']) + ', ' + \
+                   '\u2694: ' + str(dragon.dragon_stats['clawSharpness']) + ', ' + \
+                   '\N{DRAGON}: ' + str(dragon.dragon_stats['wingStrength']) + ', ' + \
+                   '\N{FIRE}: ' + str(dragon.dragon_stats['fireBreath']) + ').\n'
 
         sys.stdout.buffer.write(text.encode('utf8'))
 

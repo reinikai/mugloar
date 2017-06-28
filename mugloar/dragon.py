@@ -23,6 +23,7 @@ class Dragon:
     def __init__(self):
         """ Initializes instance variables. """
         self.dragon_stats: Dict[str, int] = {}
+        self.stays_home = False
 
     def set_relative_stats(self, dragon_stats: tuple, knight: dict) -> None:
         """ Sets the dragon's stats relative to the knight's corresponding stats. """
@@ -42,6 +43,8 @@ class Dragon:
             self.dragon_stats[STATS_MAP[stat]] = points
             points_left -= points
 
+        self.stays_home = False
+
     def set_stats(self, scale_thickness: int, claw_sharpness: int, wing_strength: int, fire_breath: int) -> None:
         """ A shorthand method for setting all of the dragon's stats in one go. """
 
@@ -52,26 +55,14 @@ class Dragon:
                              'clawSharpness': claw_sharpness,
                              'wingStrength': wing_strength,
                              'fireBreath': fire_breath}
+        self.stays_home = False
+
+    def set_dragon_stays_home(self):
+        self.stays_home = True
+
 
     def get_json(self) -> dict:
         """ Returns dragon's stats in a format that corresponds to the API's expected JSON format. """
+        if self.stays_home:
+            return {}
         return {"dragon": self.dragon_stats}
-
-
-def possible_solutions():
-    """ Generate all possible distributions of available points. """
-    return partition(POINTS_AVAILABLE, len(STATS_MAP), MIN_PER_STAT, MAX_PER_STAT)
-
-
-def partition(integer: int, partition_length: int, min_size: int, max_size: int) -> Generator:
-    """ Invoke positive integer partitioning with minimum and maximum element limits. """
-    if partition_length < 1 or integer < 0:
-        return
-
-    if partition_length == 1:
-        if integer <= max_size >= min_size:
-            yield (integer,)
-        return
-    for i in range(min_size, max_size + 1):
-        for result in partition(integer - i, partition_length - 1, i, max_size):
-            yield result + (i,)
